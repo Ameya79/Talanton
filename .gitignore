@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Talanton cache
+.talanton/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ── Next.js web dashboard (NOT part of the PyPI package) ──
+app/
+public/
+node_modules/
+.next/
+package.json
+package-lock.json
+next.config.mjs
+next-env.d.ts
+
+# ── Standalone landing pages (NOT part of the PyPI package) ──
+index.html
+index.css
+index.js
+explainer.html
+technical-brief.html
+assets/
+
+# ── Design / spec docs (NOT part of the PyPI package) ──
+PRD*.md
+TRD*.md
+CLAUDE.md
+
+# ── Agent config (NOT part of the PyPI package) ──
+.agents/
+AGENTS.md
