@@ -77,7 +77,7 @@ def _parse_models_list(models_arg: str | list[str]) -> list[str]:
 
 
 @click.group()
-@click.version_option(version="0.2.0", prog_name="Talanton")
+@click.version_option(version="0.2.1", prog_name="Talanton")
 def cli() -> None:
     """Talanton — Universal token counting, cost calculation, scale forecasting, and live cost tracking."""
     pass

@@ -30,7 +30,7 @@ from talanton.providers import (
 )
 from talanton.tracker import TalantonTracker
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 __all__ = [
     # Core — token counting & cost
