@@ -6,6 +6,11 @@ Provides commands:
     talanton compare "prompt" --models gpt-4o,claude-sonnet-4.5,gpt-4o-mini
     talanton forecast --model gpt-4o --calls-per-day 500 --avg-input 800 --avg-output 300 --months 6 --growth 0.15
     talanton compare-at-scale --models gpt-4o,gpt-4o-mini --calls-per-day 500 --avg-input 800 --avg-output 300
+    talanton track summary --period day
+    talanton track calls --limit 50 --model gpt-4o
+    talanton track export --format csv --output spend.csv
+    talanton budget set --soft 50 --hard 100 --period day
+    talanton budget status
 """
 
 from __future__ import annotations
@@ -72,9 +77,9 @@ def _parse_models_list(models_arg: str | list[str]) -> list[str]:
 
 
 @click.group()
-@click.version_option(version="0.1.0", prog_name="Talanton")
+@click.version_option(version="0.2.0", prog_name="Talanton")
 def cli() -> None:
-    """Talanton — Universal token counting, cost calculation, and scale forecasting."""
+    """Talanton — Universal token counting, cost calculation, scale forecasting, and live cost tracking."""
     pass
 
 
@@ -246,5 +251,142 @@ def cmd_compare_at_scale(models: str, calls_per_day: float, avg_input: int, avg_
         click.secho(f"[*] Potential Savings by Choosing {cheapest}: ${savings:,.2f} over {months} months\n", fg="cyan", bold=True)
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# NEW v0.2.0: Track & Budget Command Groups
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+@cli.group("track")
+def cmd_track_group() -> None:
+    """Live cost tracking — view spend summaries, recent calls, and export data."""
+    pass
+
+
+@cmd_track_group.command("summary")
+@click.option("--period", "-p", default="day", type=click.Choice(["day", "week", "month"]), help="Summary period.")
+@click.option("--team", "-t", default=None, help="Filter by team.")
+def cmd_track_summary(period: str, team: str | None) -> None:
+    """View aggregated spend summary for a period."""
+    from talanton.tracker import TalantonTracker
+
+    tracker = TalantonTracker()
+    summary = tracker.get_summary(period=period, team=team)
+
+    click.secho(f"\n{'═' * 60}", fg="cyan")
+    click.secho(f"  Talanton Spend Summary — Last {period.upper()}", fg="cyan", bold=True)
+    click.secho(f"{'═' * 60}", fg="cyan")
+    click.secho(f"  Total Spend: ${summary['total_spend']:.6f}", fg="white", bold=True)
+
+    if summary["by_model"]:
+        headers = ["Model", "Calls", "Total Cost", "Input Tokens", "Output Tokens"]
+        rows = []
+        for entry in summary["by_model"]:
+            rows.append([
+                entry["model"],
+                str(entry["total_calls"]),
+                f"${entry['total_cost']:.6f}",
+                f"{entry['total_input_tokens']:,}",
+                f"{entry['total_output_tokens']:,}",
+            ])
+        _render_table("Spend by Model", headers, rows)
+
+    if summary["by_team"]:
+        headers = ["Team", "Calls", "Total Cost"]
+        rows = []
+        for entry in summary["by_team"]:
+            rows.append([
+                entry["team"],
+                str(entry["total_calls"]),
+                f"${entry['total_cost']:.6f}",
+            ])
+        _render_table("Spend by Team", headers, rows)
+
+    if not summary["by_model"]:
+        click.secho("  No tracked calls found for this period.\n", fg="yellow")
+
+
+@cmd_track_group.command("calls")
+@click.option("--limit", "-l", default=20, type=int, help="Number of recent calls to show.")
+@click.option("--model", "-m", default=None, help="Filter by model.")
+@click.option("--team", "-t", default=None, help="Filter by team.")
+def cmd_track_calls(limit: int, model: str | None, team: str | None) -> None:
+    """View recent tracked calls."""
+    from talanton.tracker import TalantonTracker
+
+    tracker = TalantonTracker()
+    calls = tracker.get_calls(limit=limit, model=model, team=team)
+
+    if not calls:
+        click.secho("No tracked calls found.", fg="yellow")
+        return
+
+    headers = ["Timestamp", "Model", "In Tokens", "Out Tokens", "Cost", "Team"]
+    rows = []
+    for c in calls:
+        ts = c.get("timestamp", "")[:19]  # Trim to seconds
+        rows.append([
+            ts,
+            c.get("model", ""),
+            str(c.get("input_tokens", 0)),
+            str(c.get("output_tokens", 0)),
+            f"${c.get('total_cost', 0):.6f}",
+            c.get("team", "-") or "-",
+        ])
+    _render_table(f"Recent Tracked Calls (Last {limit})", headers, rows)
+
+
+@cmd_track_group.command("export")
+@click.option("--format", "fmt", default="json", type=click.Choice(["json", "csv"]), help="Export format.")
+@click.option("--output", "-o", default=None, help="Output file path. Prints to stdout if not specified.")
+def cmd_track_export(fmt: str, output: str | None) -> None:
+    """Export tracked call data to JSON or CSV."""
+    from talanton.tracker import TalantonTracker
+
+    tracker = TalantonTracker()
+    data = tracker.export(fmt=fmt)
+
+    if not data:
+        click.secho("No data to export.", fg="yellow")
+        return
+
+    if output:
+        with open(output, "w", encoding="utf-8") as f:
+            f.write(data)
+        click.secho(f"Exported to {output} ({fmt.upper()})", fg="green")
+    else:
+        click.echo(data)
+
+
+@cli.group("budget")
+def cmd_budget_group() -> None:
+    """Budget guardrails — set and check spend limits."""
+    pass
+
+
+@cmd_budget_group.command("status")
+@click.option("--period", "-p", default="day", type=click.Choice(["day", "week", "month"]), help="Budget period.")
+@click.option("--team", "-t", default=None, help="Team scope.")
+def cmd_budget_status(period: str, team: str | None) -> None:
+    """Show current spend against configured limits."""
+    from talanton.tracker import TalantonTracker
+
+    tracker = TalantonTracker()
+    spend = tracker.store.get_total_spend(period=period, team=team)
+
+    scope = f"team={team}" if team else "global"
+    click.secho(f"\n{'═' * 50}", fg="cyan")
+    click.secho(f"  Budget Status — {period.upper()} ({scope})", fg="cyan", bold=True)
+    click.secho(f"{'═' * 50}", fg="cyan")
+    click.secho(f"  Current Spend: ${spend:.6f}", fg="white", bold=True)
+    click.echo()
+
+    # Show suggestion for setting limits
+    if spend == 0:
+        click.secho("  No spend recorded. Start tracking calls to see budget status.", fg="yellow")
+    click.echo()
+
+
+
 if __name__ == "__main__":
     cli()
+

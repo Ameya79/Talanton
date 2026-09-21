@@ -40,7 +40,8 @@ index.css
 index.js
 explainer.html
 technical-brief.html
-assets/
+assets/*
+!assets/talanton-logo.png
 
 # ── Design / spec docs (NOT part of the PyPI package) ──
 PRD*.md
