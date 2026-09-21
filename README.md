@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/talanton/"><img src="https://img.shields.io/pypi/v/talanton.svg?color=0019ff&labelColor=070e24&logo=pypi&logoColor=white" alt="PyPI Version"></a>
-  <a href="https://pypi.org/project/talanton/"><img src="https://img.shields.io/pypi/pyversions/talanton.svg?color=0019ff&labelColor=070e24" alt="Python Versions"></a>
+  <a href="https://pypi.org/project/talanton-py/"><img src="https://img.shields.io/pypi/v/talanton-py.svg?color=0019ff&labelColor=070e24&logo=pypi&logoColor=white" alt="PyPI Version"></a>
+  <a href="https://pypi.org/project/talanton-py/"><img src="https://img.shields.io/pypi/pyversions/talanton-py.svg?color=0019ff&labelColor=070e24" alt="Python Versions"></a>
   <a href="https://github.com/Ameya79/Talanton/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-38bdf8.svg?labelColor=070e24" alt="License: MIT"></a>
   <a href="https://github.com/Ameya79/Talanton/actions"><img src="https://img.shields.io/badge/tests-75%2F75%20passing-10b981.svg?labelColor=070e24" alt="Tests Status"></a>
   <a href="https://github.com/Ameya79/Talanton"><img src="https://img.shields.io/badge/latency-0.08ms%20P50-38bdf8.svg?labelColor=070e24" alt="Latency P50"></a>
@@ -61,20 +61,22 @@ Traditional AI features fly blind until cloud invoices arrive. A single stuck co
 
 ```bash
 # Core package (token counting, cost calculation, live tracking, guardrails)
-pip install talanton
+pip install talanton-py
 
 # With OpenAI tiktoken support
-pip install "talanton[openai]"
+pip install "talanton-py[openai]"
 
 # With Anthropic API counting support
-pip install "talanton[anthropic]"
+pip install "talanton-py[anthropic]"
 
 # With local HuggingFace open-weight tokenizers
-pip install "talanton[huggingface]"
+pip install "talanton-py[huggingface]"
 
 # All providers + rich terminal CLI
-pip install "talanton[all]"
+pip install "talanton-py[all]"
 ```
+
+> **Import Note**: The package name is `talanton-py`, but in Python code you simply use `import talanton` and the CLI command is `talanton`.
 
 ---
 

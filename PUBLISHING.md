@@ -1,7 +1,7 @@
 # Publishing Talanton to PyPI
 
 > **Author**: Ameya Kulkarni (`acclaptop47@gmail.com`)
-> **Package**: [talanton](https://pypi.org/project/talanton/)
+> **Package**: [talanton-py](https://pypi.org/project/talanton-py/)
 > **Repository**: [github.com/Ameya79/Talanton](https://github.com/Ameya79/Talanton)
 > **License**: MIT
 

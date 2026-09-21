@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "talanton"
+name = "talanton-py"
 version = "0.2.0"
 description = "The universal meter for what your AI calls actually cost — live cost tracking, budget guardrails, and multi-provider token counting."
 readme = "README.md"
