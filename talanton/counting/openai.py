@@ -7,13 +7,19 @@ chat-formatted message lists, matching OpenAI's official cookbook formula.
 from __future__ import annotations
 
 from typing import Any
-import tiktoken
 
 from talanton.providers import get_model_info
 
 
-def _get_encoding(model: str) -> tiktoken.Encoding:
+def _get_encoding(model: str) -> Any:
     """Gets tiktoken Encoding object for a model with graceful fallbacks."""
+    try:
+        import tiktoken
+    except ImportError:
+        raise ImportError(
+            "tiktoken is required for OpenAI token counting. "
+            "Install with: pip install 'talanton-py[openai]'"
+        )
     try:
         return tiktoken.encoding_for_model(model)
     except KeyError:
