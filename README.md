@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Ameya79/Talanton">
-    <img src="https://raw.githubusercontent.com/Ameya79/Talanton/main/assets/talanton-logo.png" alt="Talanton — The Universal Meter for What Your AI Calls Actually Cost" width="300">
+    <img src="https://raw.githubusercontent.com/Ameya79/Talanton/main/assets/talanton-logo.png" alt="Talanton: The Universal Meter for What Your AI Calls Actually Cost" width="300">
   </a>
 </p>
 
@@ -17,6 +17,7 @@
   <a href="https://github.com/Ameya79/Talanton/actions"><img src="https://img.shields.io/badge/tests-75%2F75%20passing-10b981.svg?labelColor=070e24" alt="Tests Status"></a>
   <a href="https://github.com/Ameya79/Talanton"><img src="https://img.shields.io/badge/latency-0.08ms%20P50-38bdf8.svg?labelColor=070e24" alt="Latency P50"></a>
   <a href="https://github.com/Ameya79/Talanton"><img src="https://img.shields.io/badge/telemetry-100%25%20local--first-0019ff.svg?labelColor=070e24" alt="100% Local-First"></a>
+  <a href="https://benchtoplabs.vercel.app/p/talanton"><img src="https://benchtoplabs.vercel.app/api/badge/talanton" alt="Benchtop Labs: 6/6 Passed"></a>
 </p>
 
 <p align="center">
@@ -34,9 +35,9 @@
 
 ## What is Talanton?
 
-**Talanton** (*τάλαντον* — ancient Greek for the balance scale used to weigh silver and gold) is an open-source, local-first Python library and CLI that acts like a **credit card spending limit for your AI**.
+**Talanton** (*τάλαντον*, ancient Greek for the balance scale used to weigh silver and gold) is an open-source, local-first Python library and CLI that acts like a **credit card spending limit for your AI**.
 
-Traditional AI features fly blind until cloud invoices arrive. A single stuck coding agent or while-loop can retry 100 times on a syntax typo, silently ballooning conversation history and burning **$150+ in minutes**. Cloud observability proxies add 50ms–150ms of network latency and exfiltrate your private prompts to third-party clouds.
+Traditional AI features fly blind until cloud invoices arrive. A single stuck coding agent or while-loop can retry 100 times on a syntax typo, silently ballooning conversation history and burning **$150+ in minutes**. Cloud observability proxies add 50ms-150ms of network latency and exfiltrate your private prompts to third-party clouds.
 
 **Talanton solves this in 0.08 milliseconds directly on your CPU:**
 1. **Pre-Flight Metrology**: Accurately counts tokens and computes exact dollar costs across **OpenAI**, **Anthropic**, and **HuggingFace** models *before* sending API requests.
@@ -47,7 +48,7 @@ Traditional AI features fly blind until cloud invoices arrive. A single stuck co
 
 ## Key Features
 
-- **Exact vs. Estimated Transparency**: Every single count and cost output explicitly carries an `exact: True/False` flag — never blurring provider-verified counts with rough heuristic guesses.
+- **Exact vs. Estimated Transparency**: Every single count and cost output explicitly carries an `exact: True/False` flag: never blurring provider-verified counts with rough heuristic guesses.
 - **Chat Template Overhead Accounting**: Accurately measures provider-specific system/user message wrapping and reply primer tokens (+7 to +9 tokens per turn) rather than naive raw string concatenation.
 - **Sub-Millisecond Budget Guardrails**: Configurable soft warnings and hard spending caps (`ALLOW`, `WARN`, `BLOCK`) that raise `BudgetExceededError` in `0.08ms` to kill loops instantly.
 - **Drop-In SDK Wrappers**: 1-line auto-tracking wrappers for `openai.OpenAI()`, `anthropic.Anthropic()`, LangChain, and LiteLLM.
