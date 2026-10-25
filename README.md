@@ -17,7 +17,13 @@
   <a href="https://github.com/Ameya79/Talanton/actions"><img src="https://img.shields.io/badge/tests-75%2F75%20passing-10b981.svg?labelColor=070e24" alt="Tests Status"></a>
   <a href="https://github.com/Ameya79/Talanton"><img src="https://img.shields.io/badge/latency-0.08ms%20P50-38bdf8.svg?labelColor=070e24" alt="Latency P50"></a>
   <a href="https://github.com/Ameya79/Talanton"><img src="https://img.shields.io/badge/telemetry-100%25%20local--first-0019ff.svg?labelColor=070e24" alt="100% Local-First"></a>
-  <a href="https://benchtoplabs.vercel.app/p/talanton"><img src="https://benchtoplabs.vercel.app/api/badge/talanton" alt="Benchtop Labs: 6/6 Passed"></a>
+  <a href="https://benchtoplabs.vercel.app/p/talanton"><img src="https://benchtoplabs.vercel.app/api/badge/talanton?style=featured" alt="Featured on Benchtop Labs"></a>
+</p>
+
+<p align="center">
+  <a href="https://benchtoplabs.vercel.app/p/talanton">
+    <img src="https://benchtoplabs.vercel.app/api/badge/talanton?style=card" alt="Benchtop Labs Verified Spec" />
+  </a>
 </p>
 
 <p align="center">
@@ -78,6 +84,21 @@ pip install "talanton-py[all]"
 ```
 
 > **Import Note**: The package name is `talanton-py`, but in Python code you simply use `import talanton` and the CLI command is `talanton`.
+
+### 🐳 Run with Docker
+
+Anyone can run Talanton instantly without needing Python or local virtual environments:
+
+```bash
+# Calculate token count and cost via Docker Compose
+docker compose run --rm talanton cost "Analyze Q3 revenue report" --model gpt-4o
+
+# Compare multiple candidate models side-by-side
+docker compose run --rm talanton compare "Analyze system architecture" --models gpt-4o,gpt-4o-mini,claude-3-5-haiku-latest
+
+# Or launch an interactive container
+docker compose run --rm talanton
+```
 
 ---
 

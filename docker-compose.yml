@@ -1,0 +1,9 @@
+services:
+  talanton:
+    build: .
+    image: talanton:latest
+    container_name: talanton
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/app
